@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Javascript Quiz</title>
+    </head>
+    <body>
+        <div id="quiz"></div>
+    
+       
+        <button id="submit">Submit</button>
+        <div id="results"></div>
+
+        <script>
+            var quizContainer = document.getElementById("quiz");
+            var resultsContainer = document.getElementById("results");
+            var submitButton = document.getElementById("submit");
+
+            var myQuestions = [
+                { 
+                    question: "Which of these represents a deliberate non-value?",
+                answers:{ a:"N/A", b:"null", c: "0"}, correctAnswer: "b"
+                },
+                {
+                    question: "Which word would be considered the method in this statement:'document.getElementById('yo momma')'",
+                    answers:{ a:"document", b:"getElementById", c:"yo momma"}, correctAnswer: "b"
+                },
+                {
+                    question: "Multi-line comments start with ___ and end with ____ ",
+                    answers:{ a:"/*,/", b:"/*,/*", c:"/*,*/"}, correctAnswer: "c"
+                },
+                { 
+                   question: "A variable that stores a series of characters like 'John Doe' are called ___",
+                answers:{ a:"string", b:"value", c: "input"}, correctAnswer: "a"
+                },
+                { 
+                    question: "Who understands Javascript?",
+                answers:{ a:"You", b:"Me", c: "No-one"}, correctAnswer: "c"
+                }
+            ];
+
+           
+            
+
+            function buildQuiz(){
+                var output = [];
+               
+
+                myQuestions.forEach((currentQuestion, questionNumber) => {
+                    
+                    var answers = [];
+                    for(letter in currentQuestion.answers){
+                        answers.push(
+                            `<label>
+                                <input type = "radio" name="question${questionNumber}" value="${letter}">
+                                ${letter}: ${currentQuestion.answers[letter]}
+                            </label>`
+                        );
+                    }
+                    output.push(
+                       
+                        `<div class= "question">${currentQuestion.question}</div>
+                        <div class= "answers">${answers.join('')}</div>`
+                        
+                    
+                    );
+                }
+             );
+                quizContainer.innerHTML = output.join('');
+            }
+             
+            
+
+            function showResults(){
+                var answersContainers = quizContainer.querySelectorAll(".answers")
+
+                var correctChoices = 0;
+
+                myQuestions.forEach((currentQuestion, questionNumber) => {
+                   
+                    var answerContainer = answersContainers[questionNumber];
+                    var selector = `input[name=question${questionNumber}]:checked`;
+                    var userAnswer = (answerContainer.querySelector(selector) || {}).value;
+
+                    if(userAnswer === currentQuestion.correctAnswer){
+                        correctChoices++;
+                        answersContainers[questionNumber].style.color='green';
+                    }
+                    else{
+                        answersContainers[questionNumber].style.color = 'red';
+                    
+                    }
+                });
+                resultsContainer.innerHTML = `${correctChoices} out of ${myQuestions.length}`; 
+            }
+
+            buildQuiz();
+
+            submitButton.addEventListener("click", showResults);
+        </script>
+
+
+
+    </body>
+</html>
